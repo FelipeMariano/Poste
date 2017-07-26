@@ -1,0 +1,26 @@
+<form ng-submit="comment()" id="commentsForm" name="commentsForm">
+  <fieldset>
+    <legend>Comente...</legend>
+    <div class="alert alert-danger" ng-show="c.alert">
+      Erro ao enviar comentário!
+    </div>
+    <div class="form-group name">
+      <label for="name" class="control-label">Nome</label>
+      <div class="control-field">
+        <input type="text" name="nome" id="nome" ng-model="c.autor" required>
+      </div>
+      <div class="form-group comment">
+        <label for="comment" class="control-label">Comente aqui</label>
+        <div class="control-field">
+            <textarea name="comment" rows="8" cols="80" id="comentario" ng-model="c.comment" required></textarea>
+        </div>
+      </div>
+      <div class="form-group button-group">
+        <div class="control-field">
+          <button type="submit" class="btn btn-primary btn-comment">Comentar</button>
+          <a href="#" class="btn btn-default btn-cancel">Desistir</a>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</form>

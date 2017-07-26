@@ -45,37 +45,31 @@
               </div>
               <div class="caption">
                 <h3>Thumbnail label</h3>
-                <p>...</p>
-                <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
               </div>
             </div>
         </div>
       </div>
       <br/>
-      <h2>Comentários (2)</h2>
-      <div class="panel panel-default comentarios">
-        <div class="panel-body">
-          <div class="col-sm-12">
-            <div class="row">
-             <div class="col-sm-6">
-                 <span class="comentario-apresentacao">11/07/2017 - Felipe M.</span>
-             </div>
-              <div class="col-sm-2 option-buttons">
-                <button class="btn btn-small btn-success">Editar</button>
-                <button class="btn btn-small btn-danger">Remover</button>
-              </div>
 
+      <div ng-app="comments">
+        <div class="col-sm-12">
+          <div class="row">
+            <div class="panel panel-default comentar">
+            <div class="panel-body" >
+              <comment-form></comment-form>
             </div>
-          </div>
-          <div class="col-sm-12">
-            <div class="comentario">
-              <h5>Muito bom!</h5>
             </div>
           </div>
         </div>
+        <div class="col-sm-12">
+          <div class="row">
+            <comment-list></comment-list>
+          </div>
+        </div>
       </div>
-      <button id="btn-novo-comentario" class="btn btn-large btn-success">Comentar</button>
-    </div>
 
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js" charset="utf-8"></script>
+    <script src="comments.js" charset="utf-8"></script>
   </body>
 </html>
