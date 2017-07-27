@@ -1,4 +1,5 @@
 var posts = angular.module("posts", []);
+var baseUrl = "http://localhost:3000/";
 
 posts.directive("postList", [
   function(){
@@ -16,19 +17,13 @@ posts.directive("postList", [
 
 posts.service("PostsService", ["$http", function($http){
   this.get = function(callback){
-    callback([
-      {
-        url: "https://blog.emania.com.br/content/uploads/2015/12/Papel-de-Parede-de-Paisagem.jpg",
-        titulo: "Thumb!",
-        comentarios: 5
-      }
-    ]);
+    return $http.get(baseUrl + "poste/");
   }
 }]);
 
 posts.controller("PostsController", ["$scope","PostsService", function($scope, PostsService){
-  PostsService.get(function(response){
-    console.log(response);
-    $scope.posts = response;
+  PostsService.get().then((posts) => {
+    console.log(posts.data);
+    $scope.posts = posts.data;
   });
 }]);

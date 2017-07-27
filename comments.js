@@ -1,4 +1,5 @@
 var comments = angular.module("comments", []);
+var baseUrl = "http://localhost:3000/";
 
 comments.directive("commentList", [
   function(){
@@ -14,28 +15,28 @@ comments.directive("commentList", [
   }
 ]);
 
-comments.service("CommentsService", ["$http", function($http){
-  var fake = [
-    {
-      autor: "nozes",
-      conteudo: "achei justo",
-      data: "11/07/2017"
-    },
-    {
-      autor: "nozes 2",
-      conteudo: "achei justo",
-      data: "11/07/2017"
-    }
-  ];
-
-  this.get = function(callback){
-    callback(fake);
+comments.service("CommentsService", ["$http", "$location", function($http, $location){
+  var params = $location.search();
+  var comments = [];
+  this.get = function(success, error){
+    return $http.get(baseUrl + "poste/" + params.foto).then(function(response){
+      comments = response.data.comentarios;
+      success(comments);
+    }, function(err){
+      error(err);
+    });
+    //callback(fake);
   };
 
-  this.post = function(data, callback){
-    //TODO
-    fake.push(data);
-    callback(data);
+  this.post = function(data, success, error){
+    return $http.post(baseUrl + "poste/" + params.foto + "/comment", data).then(function(response){
+      comments.push(data);
+      success(response);
+    }, function(err){
+      error(err);
+    });
+    //fake.push(data);
+    //callback(data);
   }
 
   this.remove = function(data, callback){
@@ -46,10 +47,13 @@ comments.service("CommentsService", ["$http", function($http){
 }]);
 
 comments.controller("CommentsController", ["$scope", "CommentsService", function($scope, CommentsService){
-  CommentsService.get(function(response){
-    console.log(response);
-    $scope.comments = response;
-  });
+  this.get = function(){
+    CommentsService.get(function(comments){
+        $scope.comments = comments;
+    });
+  }
+
+  this.get();
 }]);
 
 
@@ -74,14 +78,15 @@ comments.controller("CommentsFormController", ["$scope", "CommentsService", func
 
     var data = {
       autor: $scope.c.autor,
-      comment: $scope.c.comment,
-      comentarios: 0
+      comentario: $scope.c.comment,
+      data:  date
     };
 
     CommentsService.post(data, function(response){
-      console.log($scope.commentsForm);
       $scope.commentsForm.$setPristine();
       $scope.c = {};
+    }, function(err){
+      console.log(err);
     });
   };
 
