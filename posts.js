@@ -15,15 +15,68 @@ posts.directive("postList", [
   }
 ]);
 
+
+posts.directive("postForm", [
+  function(){
+    return {
+      restrict: "E",
+      templateUrl: "directives/post-form.html",
+      controller: "PostFormController",
+      controllerAs: "postForm"
+    }
+  }
+]);
+
+
 posts.service("PostsService", ["$http", function($http){
-  this.get = function(callback){
-    return $http.get(baseUrl + "poste/");
+
+  var posts = []
+  this.get = function(success, error){
+    $http.get(baseUrl + "poste/").then(function(response){
+      posts = response.data;
+      success(posts);
+    }, function(err){
+      error(err);
+    });
+  }
+
+  this.post = function(data, success, error){
+
+    $http.post(baseUrl + "poste/new", data).then(function(response){
+      posts.unshift(response.data);
+      success(response);
+    }, function(err){
+      error(err);
+    });
   }
 }]);
 
 posts.controller("PostsController", ["$scope","PostsService", function($scope, PostsService){
-  PostsService.get().then((posts) => {
-    console.log(posts);
-    $scope.posts = posts.data;
+  PostsService.get(function(posts){
+    $scope.posts = posts;
   });
+}]);
+
+
+posts.controller("PostFormController", ["$scope", "PostsService", function($scope, PostsService){
+  $scope.p = {};
+  $scope.p.alert = false;
+
+  $scope.post = function(post){
+    var date = new Date();
+
+    var data = {
+      url: $scope.p.url,
+      titulo: $scope.p.titulo,
+      data:  date
+    };
+
+    PostsService.post(data, function(response){
+      $scope.postForm.$setPristine();
+      $scope.p = {};
+    }, function(err){
+      console.log(err);
+    });
+  };
+
 }]);

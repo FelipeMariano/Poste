@@ -1,0 +1,23 @@
+<form ng-submit="post()" id="postForm" name="postForm">
+  <fieldset>
+    <div class="alert alert-danger" ng-show="c.alert">
+      Erro ao postar foto!
+    </div>
+    <div class="form-group name">
+      <label for="url" class="control-label">URL</label>
+      <div class="control-field">
+        <input type="text" name="url" id="url" ng-model="p.url" required>
+      </div>
+      <label for="titulo" class="control-label">Titulo</label>
+      <div class="control-field">
+        <input type="text" name="titulo" id="titulo" ng-model="p.titulo" required>
+      </div>
+
+      <div class="form-group button-group">
+        <div class="control-field">
+          <button type="submit" class="btn btn-primary btn-comment">Postar</button>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</form>

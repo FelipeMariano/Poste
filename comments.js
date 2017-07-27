@@ -15,13 +15,28 @@ comments.directive("commentList", [
   }
 ]);
 
+
+comments.directive("galleryPhoto", [
+  function(){
+    return {
+      restrict: "E",
+      scope: {
+        url: "="
+      },
+      templateUrl: "directives/gallery-photo.html",
+      controller: "PhotoController",
+      controllerAs: "photo"
+    }
+  }
+]);
+
 comments.service("CommentsService", ["$http", "$location", function($http, $location){
   var params = $location.search();
   var comments = [];
   this.get = function(success, error){
     return $http.get(baseUrl + "poste/" + params.foto).then(function(response){
       comments = response.data.comentarios;
-      success(comments);
+      success(response.data);
     }, function(err){
       error(err);
     });
@@ -29,7 +44,7 @@ comments.service("CommentsService", ["$http", "$location", function($http, $loca
   };
 
   this.post = function(data, success, error){
-    return $http.post(baseUrl + "poste/" + params.foto + "/comment", data).then(function(response){
+    $http.post(baseUrl + "poste/" + params.foto + "/comment", data).then(function(response){
       comments.push(data);
       success(response);
     }, function(err){
@@ -46,10 +61,17 @@ comments.service("CommentsService", ["$http", "$location", function($http, $loca
   }
 }]);
 
+comments.controller("PhotoController", ["$scope", "CommentsService", function($scope, CommentsService){
+  CommentsService.get(function(data){
+        $scope.photo_url = data.url;
+        console.log(data);
+    });
+}]);
+
 comments.controller("CommentsController", ["$scope", "CommentsService", function($scope, CommentsService){
   this.get = function(){
-    CommentsService.get(function(comments){
-        $scope.comments = comments;
+    CommentsService.get(function(data){
+        $scope.comments = data.comentarios;
     });
   }
 
