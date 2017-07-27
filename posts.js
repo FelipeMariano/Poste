@@ -23,7 +23,7 @@ posts.service("PostsService", ["$http", function($http){
 
 posts.controller("PostsController", ["$scope","PostsService", function($scope, PostsService){
   PostsService.get().then((posts) => {
-    console.log(posts.data);
+    console.log(posts);
     $scope.posts = posts.data;
   });
 }]);
