@@ -62,12 +62,14 @@ posts.controller("PostFormController", ["$scope", "$cookies", "$cookieStore", "P
   $scope.p = {};
   $scope.p.alert = false;
 
-  $cookieStore.put("user", "Felipe");
+  //$cookieStore.put("user", "Felipe");
 
   var userId = $cookieStore.get("userId");
   $scope.currentUserId = userId;
   $scope.showPostForm = userId != undefined && userId != null && userId != "";
   $scope.showLogin = !$scope.showPostForm;
+
+  $scope.currentUser = $cookieStore.get("user");
 
   $scope.post = function(post){
     var date = new Date();
