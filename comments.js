@@ -101,14 +101,16 @@ comments.controller("CommentsFormController", ["$scope", "$cookies", "$cookieSto
   $scope.c.alert = false;
 
   var userId = $cookieStore.get("userId");
+  var currentUser = $cookieStore.get("user");
   $scope.currentUserId = userId;
+  $scope.currentUser = currentUser;
   $scope.showCommentForm = userId != undefined && userId != null && userId != "";
 
   $scope.comment = function(comments){
     var date = new Date();
 
     var data = {
-      autor: $scope.c.autor,
+      autor: currentUser,
       comentario: $scope.c.comment,
       data:  date
     };

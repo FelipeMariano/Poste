@@ -14,17 +14,23 @@ login.directive("loginForm", [
 
 login.service("LoginService", ["$http", function($http){
   this.signin = function(data, success, error){
+    $http.post(baseUrl + "authentication/signin", data).then(function(response){
+      success(response);
+    }, function(err){
+      error(err);
+    })
+
     //fake
-    console.log(data);
-    if(!data || data.login != "felipe" || data.password != "123")
-    error();
-    else
-      //TODO
-      success({
-        status: "success",
-        user: "Felipe Mariano",
-        user_id: "123"
-      });
+    // console.log(data);
+    // if(!data || data.login != "felipe" || data.password != "123")
+    //   error();
+    // else
+    //   //TODO
+    //   success({
+    //     status: "success",
+    //     user: "Felipe Mariano",
+    //     user_id: "123"
+    //   });
   }
 }]);
 
@@ -35,17 +41,26 @@ login.controller("LoginFormController", ["$scope", "$window", "$cookies", "$cook
     $scope.u.alert = false;
 
     var data = {
-      login: $scope.user.login,
+      user: $scope.user.login,
       password: $scope.user.password
     };
 
+    function error(err){
+      $scope.u.alert = true;
+      console.error(err);
+    }
+
     LoginService.signin(data, function(login){
-      $cookieStore.put("user", login.user);
-      $cookieStore.put("userId", login.user_id);
+      if(!login.data.success){
+        error(login.data.message);
+        return;
+      }
+      $cookieStore.put("role", login.data.user.role);
+      $cookieStore.put("user", login.data.user.user);
+      $cookieStore.put("userId", login.data.user._id);
       $window.location.href = "/";
     }, function(err){
-      $scope.user.alert = true;
-      console.error("erro ao realizar login!");
+      console.log(err);
     });
   }
 }]);
