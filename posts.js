@@ -1,4 +1,4 @@
-var posts = angular.module("posts", []);
+var posts = angular.module("posts", ["ngCookies"]);
 var baseUrl = "http://localhost:3000/";
 
 posts.directive("postList", [
@@ -58,9 +58,16 @@ posts.controller("PostsController", ["$scope","PostsService", function($scope, P
 }]);
 
 
-posts.controller("PostFormController", ["$scope", "PostsService", function($scope, PostsService){
+posts.controller("PostFormController", ["$scope", "$cookies", "$cookieStore", "PostsService", function($scope, $cookies, $cookieStore, PostsService){
   $scope.p = {};
   $scope.p.alert = false;
+
+  $cookieStore.put("user", "Felipe");
+
+  var userId = $cookieStore.get("userId");
+  $scope.currentUserId = userId;
+  $scope.showPostForm = userId != undefined && userId != null && userId != "";
+  $scope.showLogin = !$scope.showPostForm;
 
   $scope.post = function(post){
     var date = new Date();

@@ -1,4 +1,4 @@
-var comments = angular.module("comments", []);
+var comments = angular.module("comments", ["ngCookies"]);
 var baseUrl = "http://localhost:3000/";
 
 comments.directive("commentList", [
@@ -61,14 +61,19 @@ comments.service("CommentsService", ["$http", "$location", function($http, $loca
   }
 }]);
 
-comments.controller("PhotoController", ["$scope", "CommentsService", function($scope, CommentsService){
+comments.controller("PhotoController", ["$scope","$cookies", "$cookieStore", "CommentsService", function($scope, $cookies, $cookieStore, CommentsService){
+  $scope.currentUser = $cookieStore.get("user");
+  $scope.currentUserId = $cookieStore.get("userId");
   CommentsService.get(function(data){
         $scope.photo_url = data.url;
-        console.log(data);
+        $scope.photo = data.titulo;
     });
 }]);
 
-comments.controller("CommentsController", ["$scope", "CommentsService", function($scope, CommentsService){
+comments.controller("CommentsController", ["$scope", "$cookies", "$cookieStore", "CommentsService", function($scope, $cookies, $cookieStore, CommentsService){
+  $scope.currentUser = $cookieStore.get("user");
+  $scope.currentUserId = $cookieStore.get("userId");
+
   this.get = function(){
     CommentsService.get(function(data){
         $scope.comments = data.comentarios;
@@ -91,9 +96,13 @@ comments.directive("commentForm", [
   }
 ]);
 
-comments.controller("CommentsFormController", ["$scope", "CommentsService", function($scope, CommentsService){
+comments.controller("CommentsFormController", ["$scope", "$cookies", "$cookieStore",  "CommentsService", function($scope, $cookies, $cookieStore, CommentsService){
   $scope.c = {};
   $scope.c.alert = false;
+
+  var userId = $cookieStore.get("userId");
+  $scope.currentUserId = userId;
+  $scope.showCommentForm = userId != undefined && userId != null && userId != "";
 
   $scope.comment = function(comments){
     var date = new Date();

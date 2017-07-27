@@ -33,11 +33,17 @@
   <body>
 
         <div class="container" ng-app="posts">
-          <post-form></post-form>
+          <div ng-show="showLogin">
+            <a href="/login">Login now!</a>
+          </div>
+          <div ng-show="showPostForm">
+            <post-form></post-form>
+          </div>
           <post-list></post-list>
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js" charset="utf-8"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-cookies.min.js" charset="utf-8"></script>
         <script src="posts.js" charset="utf-8"></script>
   </body>
 </html>

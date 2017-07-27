@@ -44,7 +44,7 @@
         <div class="col-sm-12">
           <div class="row">
             <div class="panel panel-default comentar">
-            <div class="panel-body" >
+            <div ng-show="showCommentForm" class="panel-body" >
               <comment-form></comment-form>
             </div>
             </div>
@@ -59,6 +59,7 @@
 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-cookies.min.js" charset="utf-8"></script>
     <script src="comments.js" charset="utf-8"></script>
   </body>
 </html>
