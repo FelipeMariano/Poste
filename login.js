@@ -20,17 +20,6 @@ login.service("LoginService", ["$http", function($http){
       error(err);
     })
 
-    //fake
-    // console.log(data);
-    // if(!data || data.login != "felipe" || data.password != "123")
-    //   error();
-    // else
-    //   //TODO
-    //   success({
-    //     status: "success",
-    //     user: "Felipe Mariano",
-    //     user_id: "123"
-    //   });
   }
 }]);
 

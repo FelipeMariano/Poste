@@ -40,24 +40,24 @@ comments.service("CommentsService", ["$http", "$location", function($http, $loca
     }, function(err){
       error(err);
     });
-    //callback(fake);
   };
 
   this.post = function(data, success, error){
     $http.post(baseUrl + "poste/" + params.foto + "/comment", data).then(function(response){
-      comments.push(data);
       success(response);
     }, function(err){
       error(err);
     });
-    //fake.push(data);
-    //callback(data);
   }
 
-  this.remove = function(data, callback){
-    //TODO
-    fake.remove(data);
-    callback(data);
+  this.remove = function(data, success, error){
+    $http.post(baseUrl + "poste/" + data.post + "/comment/delete", {idComentario: data.comentario})
+      .then(function(response){
+        success(response);
+        comments = response.data.comentarios;
+      }, function(err){
+        error(response);
+      });
   }
 }]);
 
@@ -70,7 +70,7 @@ comments.controller("PhotoController", ["$scope","$cookies", "$cookieStore", "Co
     });
 }]);
 
-comments.controller("CommentsController", ["$scope", "$cookies", "$cookieStore", "CommentsService", function($scope, $cookies, $cookieStore, CommentsService){
+comments.controller("CommentsController", ["$scope", "$window", "$cookies", "$cookieStore", "CommentsService", function($scope, $window, $cookies, $cookieStore, CommentsService){
   $scope.currentUser = $cookieStore.get("user");
   $scope.currentUserId = $cookieStore.get("userId");
 
@@ -78,6 +78,22 @@ comments.controller("CommentsController", ["$scope", "$cookies", "$cookieStore",
     CommentsService.get(function(data){
         $scope.comments = data.comentarios;
     });
+  }
+
+
+  $scope.remove = function(comment){
+
+    var data = {
+      comentario: comment._id,
+      post: comment.post
+    }
+
+    CommentsService.remove(data, function(success){
+      console.log("removido com sucesso!");
+      $window.location.reload();
+    }, function(err){
+      console.error(err);
+    })
   }
 
   this.get();
@@ -96,7 +112,7 @@ comments.directive("commentForm", [
   }
 ]);
 
-comments.controller("CommentsFormController", ["$scope", "$cookies", "$cookieStore",  "CommentsService", function($scope, $cookies, $cookieStore, CommentsService){
+comments.controller("CommentsFormController", ["$scope", "$window", "$cookies", "$cookieStore",  "CommentsService", function($scope, $window, $cookies, $cookieStore, CommentsService){
   $scope.c = {};
   $scope.c.alert = false;
 
@@ -108,7 +124,6 @@ comments.controller("CommentsFormController", ["$scope", "$cookies", "$cookieSto
 
   $scope.comment = function(comments){
     var date = new Date();
-
     var data = {
       autor: currentUser,
       comentario: $scope.c.comment,
@@ -117,7 +132,8 @@ comments.controller("CommentsFormController", ["$scope", "$cookies", "$cookieSto
 
     CommentsService.post(data, function(response){
       $scope.commentsForm.$setPristine();
-      $scope.c = {};
+      $scope.c =   {};
+      $window.location.reload();
     }, function(err){
       console.log(err);
     });

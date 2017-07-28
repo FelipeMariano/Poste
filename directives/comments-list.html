@@ -7,9 +7,10 @@
      <div class="col-sm-6">
          <span class="comentario-apresentacao">De {{comment.autor}} (em {{comment.data}}):</span>
      </div>
-      <div ng-show="{{currentUserId != undefined && currentUserId == comment.user}}" class="col-sm-2 option-buttons">
-        <button class="btn btn-small btn-success">Editar</button>
-        <button class="btn btn-small btn-danger">Remover</button>
+      <div ng-show="{{currentUserId != undefined && currentUser == comment.autor}}" class="col-sm-2 option-buttons">
+        <form ng-submit="remove(comment)" id="comments" name="comments">
+          <button class="btn btn-small btn-danger">Remover</button>
+        </form>
       </div>
     </div>
   </div>
